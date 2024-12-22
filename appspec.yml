@@ -1,20 +1,17 @@
-version: 0.2
-
-phases: 
-    build:
-        commands:
-            - echo "Build block"
-            - ls
-            - echo "Running tests to check if "Congratulations" present in index.html file"
-            - grep "Congratulations" index.html
-    post_build:
-        commands:
-            - echo "Post build phase"
-artifacts:
-    files:
-        - scripts/install_dependencies
-        - scripts/start_server
-        - scripts/stop_server
-        - index.html
-        - appspec.yml
-    discard-paths: yes
+version: 0.0
+os: linux
+files:
+  - source: /index.html
+    destination: /var/www/html/
+hooks:
+  BeforeInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 300
+      runas: root
+    - location: scripts/start_server.sh
+      timeout: 300
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 300
+      runas: root
